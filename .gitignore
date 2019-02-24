@@ -1,1 +1,4 @@
-/nbproject/private/
+.idea
+nbproject
+manifest*
+build.xml
