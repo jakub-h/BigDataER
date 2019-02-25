@@ -26,4 +26,5 @@ nbdist/
 
 ### datasets ###
 datasets/original
+datasets/tmp
 
