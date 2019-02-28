@@ -1,4 +1,5 @@
 import pandas as pd
+from random import random
 
 
 def split_data():
@@ -82,12 +83,49 @@ def create_source_dataset():
                     output.write("\n")
 
 
+def modify_first_knowledgebase():
+    with open("datasets/final/kb_1.csv", 'a') as output:
+        source = pd.read_csv("datasets/final/source.csv", delimiter=";")
+        for index, film in source.iterrows():
+            if random() < 0.85:
+                output.write(film["title"])
+            output.write(";")
+            if random() < 0.85:
+                output.write(film["director"])
+            output.write(";")
+            if random() < 0.85:
+                output.write(str(film["year"]))
+            output.write(";")
+            if random() < 0.85:
+                output.write(film["actor"])
+            output.write(";")
+            if random() < 0.85:
+                output.write(film["actress"])
+            output.write("\n")
+
+
+def modify_second_knowledgebase():
+    with open("datasets/final/kb_2.csv", 'a') as output:
+        source = pd.read_csv("datasets/final/source.csv", delimiter=";")
+        for index, film in source.iterrows():
+            output.write(film["title"] + ";")
+            director = film["director"].split(" ")
+            output.write(director[0][0] + ". " + director[-1] + ";")
+            output.write(str(film["year"]) + ";")
+            actor = film["actor"].split(" ")
+            output.write(actor[0][0] + ". " + actor[-1] + ";")
+            actress = film["actress"].split(" ")
+            output.write(actress[0][0] + ". " + actress[-1] + "\n")
+
+
 if __name__ == '__main__':
     # split_data()
     # filter_professions()
     # filter_num_of_titles()
     # filter_films()
-    create_source_dataset()
+    # create_source_dataset()
+    modify_first_knowledgebase()
+    modify_second_knowledgebase()
 
 
 
