@@ -84,12 +84,11 @@ def create_source_dataset():
 
 
 def modify_first_knowledgebase():
-    with open("datasets/final/kb_1.csv", 'a') as output:
+    with open("datasets/final/kb_1.csv", 'w') as output:
+        output.write("title;director;productionYear;actor;actress\n")
         source = pd.read_csv("datasets/final/source.csv", delimiter=";")
         for index, film in source.iterrows():
-            if random() < 0.85:
-                output.write(film["title"])
-            output.write(";")
+            output.write(film["title"] + ";")
             if random() < 0.85:
                 output.write(film["director"])
             output.write(";")
@@ -125,7 +124,7 @@ if __name__ == '__main__':
     # filter_films()
     # create_source_dataset()
     modify_first_knowledgebase()
-    modify_second_knowledgebase()
+    # modify_second_knowledgebase()
 
 
 
