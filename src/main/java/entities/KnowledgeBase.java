@@ -1,6 +1,11 @@
 package main.java.entities;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,5 +61,26 @@ public class KnowledgeBase {
 				"id=" + id +
 				", entities=" + entities +
 				'}';
+	}
+
+	public void loadDataset(String pathToFile) {
+		List<String> header = new ArrayList<>();
+		try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
+			String line;
+			boolean firstLine = true;
+			while ((line = br.readLine()) != null) {
+				String[] parsedLine = line.split(";");
+				if (firstLine) {
+					header.addAll(Arrays.asList(parsedLine));
+					firstLine = false;
+				} else {
+					break;
+				}
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println(header);
+
 	}
 }

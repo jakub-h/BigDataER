@@ -1,4 +1,5 @@
-package algorithms;
+package main.java.algorithms;
 
 public class TokenBlocking {
+
 }
