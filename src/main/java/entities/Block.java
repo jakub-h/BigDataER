@@ -1,4 +1,4 @@
-package main.java.entities;
+package entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,11 @@ public class Block {
 	public Block() {
 		this.id = count;
 		count++;
+	}
+
+	public Block(String token) {
+		this();
+		this.token = token;
 	}
 
 	public Block(List<EntityDescription> innerBlock1, List<EntityDescription> innerBlock2, String token) {

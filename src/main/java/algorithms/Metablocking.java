@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package MetaBlocking;
+package algorithms;
 
-import Blocking.Block;
-import Blocking.BlockCollection;
-import Graph.Edge;
-import Graph.Graph;
-import Graph.Node;
-import entities.EntityDescription;
+import entities.*;
+import entities.graph.Edge;
+import entities.graph.Graph;
+import entities.graph.Node;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,11 +22,11 @@ import java.util.Map;
  */
 public class Metablocking {
 
-    BlockCollection bc;
-    Map<Long, List<Block>> entityIndex;
-    Map<Long, EntityDescription> entityEntry;
-    Graph gr;
-    int k = 0;
+    private BlockCollection bc;
+    private Map<Long, List<Block>> entityIndex;
+    private Map<Long, EntityDescription> entityEntry;
+    private Graph gr;
+    private int k = 0;
 
     public Metablocking(BlockCollection bc) {
         this.bc = bc;
@@ -42,7 +36,7 @@ public class Metablocking {
     }
 
     private void createEntityIndex() {
-        List<Block> list = bc.getList();
+        List<Block> list = bc.getBlocks();
         for (Block b : list) {
             List<EntityDescription> ent = new ArrayList<>();
             ent.addAll(b.getInnerBlock1());
@@ -77,10 +71,10 @@ public class Metablocking {
 
     public Graph createGraph() {
         gr = new Graph();
-        List<Block> list = bc.getList();
+        List<Block> list = bc.getBlocks();
         double local = 0;
-        int KB1 = bc.getKB1();
-        int KB2 = bc.getKB2();
+        int KB1 = bc.getSizeKB1();
+        int KB2 = bc.getSizeKB2();
         int size = KB1 + KB2;
         
         for (Block b : list) {
@@ -109,7 +103,7 @@ public class Metablocking {
      */
     public Graph edgeWeightinhCommonBlocks(Graph g) {
 
-        List<Block> list = bc.getList();
+        List<Block> list = bc.getBlocks();
 
 //        for(Block b : list){
 //            List<EntityDescription> ent = b.getEnt();

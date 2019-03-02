@@ -1,29 +1,25 @@
-package main.java.entities;
+package entities;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class KnowledgeBase {
 
 	private static Long count = 0L;
 	private Long id;
-	private List<EntityDescription> entities = new ArrayList<>();
+	private List<EntityDescription> entityDescriptions = new ArrayList<>();
 
 	public KnowledgeBase() {
 		this.id = count;
 		count++;
 	}
 
-	public KnowledgeBase(List<EntityDescription> entities) {
+	public KnowledgeBase(String pathToFile) {
 		this.id = count;
 		count++;
-		this.entities = entities;
+		loadDataset(pathToFile);
 	}
 
 	public Long getId() {
@@ -34,12 +30,12 @@ public class KnowledgeBase {
 		this.id = id;
 	}
 
-	public List<EntityDescription> getEntities() {
-		return entities;
+	public List<EntityDescription> getEntityDescriptions() {
+		return entityDescriptions;
 	}
 
-	public void setEntities(List<EntityDescription> entities) {
-		this.entities = entities;
+	public void setEntityDescriptions(List<EntityDescription> entityDescriptions) {
+		this.entityDescriptions = entityDescriptions;
 	}
 
 	@Override
@@ -59,7 +55,7 @@ public class KnowledgeBase {
 	public String toString() {
 		return "KnowledgeBase{" +
 				"id=" + id +
-				", entities=" + entities +
+				", entityDescriptions=" + entityDescriptions +
 				'}';
 	}
 
@@ -68,19 +64,27 @@ public class KnowledgeBase {
 		try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
 			String line;
 			boolean firstLine = true;
+			Long realEntityId = 0L;
 			while ((line = br.readLine()) != null) {
 				String[] parsedLine = line.split(";");
+				// Load header
 				if (firstLine) {
 					header.addAll(Arrays.asList(parsedLine));
 					firstLine = false;
+				// Load rest
 				} else {
-					break;
+					Map<String, String> attributes = new HashMap<>();
+					for (int i = 0; i < header.size(); ++i) {
+						if (!parsedLine[i].isEmpty()) {
+							attributes.put(header.get(i), parsedLine[i]);
+						}
+					}
+					entityDescriptions.add(new EntityDescription(realEntityId, attributes));
+					realEntityId++;
 				}
 			}
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
-		System.out.println(header);
-
 	}
 }

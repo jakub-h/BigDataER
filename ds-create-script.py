@@ -98,9 +98,7 @@ def modify_first_knowledgebase():
             if random() < 0.85:
                 output.write(film["actor"])
             output.write(";")
-            if random() < 0.85:
-                output.write(film["actress"])
-            output.write("\n")
+            output.write(film["actress"] + "\n")
 
 
 def modify_second_knowledgebase():

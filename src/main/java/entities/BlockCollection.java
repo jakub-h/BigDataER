@@ -1,4 +1,4 @@
-package main.java.entities;
+package entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,19 @@ public class BlockCollection {
 	private static Long count = 0L;
 	private Long id;
 	private List<Block> blocks = new ArrayList<>();
+	private int sizeKB1;
+	private int sizeKB2;
 
 	public BlockCollection() {
 		this.id = count;
 		count++;
 	}
 
-	public BlockCollection(List<Block> blocks) {
+	public BlockCollection(int sizeKB1, int sizeKB2) {
 		this.id = count;
 		count++;
-		this.blocks = blocks;
+		this.sizeKB1 = sizeKB1;
+		this.sizeKB2 = sizeKB2;
 	}
 
 	public Long getId() {
@@ -35,6 +38,28 @@ public class BlockCollection {
 
 	public void setBlocks(List<Block> blocks) {
 		this.blocks = blocks;
+	}
+
+	public int getSizeKB1() {
+		return sizeKB1;
+	}
+
+	public void setSizeKB1(int sizeKB1) {
+		this.sizeKB1 = sizeKB1;
+	}
+
+	public int getSizeKB2() {
+		return sizeKB2;
+	}
+
+	public void setSizeKB2(int sizeKB2) {
+		this.sizeKB2 = sizeKB2;
+	}
+
+	public void createTokens(List<String> tokens) {
+		for (String token : tokens) {
+			blocks.add(new Block(token));
+		}
 	}
 
 	@Override
