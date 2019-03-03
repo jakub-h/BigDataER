@@ -6,15 +6,7 @@ import entities.graph.Graph;
 import entities.graph.Node;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -78,8 +70,8 @@ public class Metablocking {
         int size = KB1 + KB2;
         
         for (Block b : list) {
-            List<EntityDescription> inner1 = b.getInnerBlock1();
-            List<EntityDescription> inner2 = b.getInnerBlock2();
+            Set<EntityDescription> inner1 = b.getInnerBlock1();
+            Set<EntityDescription> inner2 = b.getInnerBlock2();
             //int size = ent.size();
             local = local + (double)(inner1.size() + inner2.size()) / (double)size;
             for (EntityDescription in1 : inner1) {

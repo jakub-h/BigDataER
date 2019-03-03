@@ -3,6 +3,7 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class BlockCollection {
 
@@ -56,7 +57,7 @@ public class BlockCollection {
 		this.sizeKB2 = sizeKB2;
 	}
 
-	public void createTokens(List<String> tokens) {
+	public void createTokens(Set<String> tokens) {
 		for (String token : tokens) {
 			blocks.add(new Block(token));
 		}

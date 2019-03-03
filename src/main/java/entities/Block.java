@@ -1,15 +1,13 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Block {
 
 	private static Long count = 0L;
 	private Long id;
-	private List<EntityDescription> innerBlock1 = new ArrayList<>();
-	private List<EntityDescription> innerBlock2 = new ArrayList<>();
+	private Set<EntityDescription> innerBlock1 = new HashSet<>();
+	private Set<EntityDescription> innerBlock2 = new HashSet<>();
 	private String token;
 
 	public Block() {
@@ -22,7 +20,7 @@ public class Block {
 		this.token = token;
 	}
 
-	public Block(List<EntityDescription> innerBlock1, List<EntityDescription> innerBlock2, String token) {
+	public Block(Set<EntityDescription> innerBlock1, Set<EntityDescription> innerBlock2, String token) {
 		this.id = count;
 		count++;
 		this.innerBlock1 = innerBlock1;
@@ -38,19 +36,19 @@ public class Block {
 		this.id = id;
 	}
 
-	public List<EntityDescription> getInnerBlock1() {
+	public Set<EntityDescription> getInnerBlock1() {
 		return innerBlock1;
 	}
 
-	public void setInnerBlock1(List<EntityDescription> innerBlock1) {
+	public void setInnerBlock1(Set<EntityDescription> innerBlock1) {
 		this.innerBlock1 = innerBlock1;
 	}
 
-	public List<EntityDescription> getInnerBlock2() {
+	public Set<EntityDescription> getInnerBlock2() {
 		return innerBlock2;
 	}
 
-	public void setInnerBlock2(List<EntityDescription> innerBlock2) {
+	public void setInnerBlock2(Set<EntityDescription> innerBlock2) {
 		this.innerBlock2 = innerBlock2;
 	}
 
@@ -79,9 +77,9 @@ public class Block {
 	public String toString() {
 		return "Block{" +
 				"id=" + id +
+				", token='" + token + '\'' +
 				", innerBlock1=" + innerBlock1 +
 				", innerBlock2=" + innerBlock2 +
-				", token='" + token + '\'' +
 				'}';
 	}
 }

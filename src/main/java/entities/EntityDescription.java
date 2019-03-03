@@ -1,8 +1,6 @@
 package entities;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class EntityDescription {
 
@@ -45,6 +43,20 @@ public class EntityDescription {
 
 	public void setAttrValPairs(Map<String, String> attrValPairs) {
 		this.attrValPairs = attrValPairs;
+	}
+
+	public Set<String> getTokens(List<String> fillings) {
+		Set<String> result = new HashSet<>();
+		Collection<String> values = attrValPairs.values();
+		for (String value : values) {
+			String[] tokens = value.split(" ");
+			for (String token : tokens) {
+				if (token.length() > 2 && !fillings.contains(token.toLowerCase())) {
+					result.add(token);
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override
