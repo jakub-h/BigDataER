@@ -1,15 +1,12 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class BlockCollection {
 
 	private static Long count = 0L;
 	private Long id;
-	private List<Block> blocks = new ArrayList<>();
+	private Set<Block> blocks = new HashSet<>();
 	private int sizeKB1;
 	private int sizeKB2;
 
@@ -33,11 +30,11 @@ public class BlockCollection {
 		this.id = id;
 	}
 
-	public List<Block> getBlocks() {
+	public Set<Block> getBlocks() {
 		return blocks;
 	}
 
-	public void setBlocks(List<Block> blocks) {
+	public void setBlocks(Set<Block> blocks) {
 		this.blocks = blocks;
 	}
 
@@ -57,18 +54,14 @@ public class BlockCollection {
 		this.sizeKB2 = sizeKB2;
 	}
 
-	public void createTokens(Set<String> tokens) {
-		for (String token : tokens) {
-			blocks.add(new Block(token));
-		}
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		BlockCollection that = (BlockCollection) o;
-		return Objects.equals(id, that.id);
+		return Objects.equals(blocks, that.blocks) &&
+				Objects.equals(sizeKB1, that.sizeKB1) &&
+				Objects.equals(sizeKB2, that.sizeKB2);
 	}
 
 	@Override

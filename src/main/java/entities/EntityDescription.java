@@ -45,13 +45,13 @@ public class EntityDescription {
 		this.attrValPairs = attrValPairs;
 	}
 
-	public Set<String> getTokens(List<String> fillings) {
+	public Set<String> getTokens(List<String> stopwords) {
 		Set<String> result = new HashSet<>();
 		Collection<String> values = attrValPairs.values();
 		for (String value : values) {
 			String[] tokens = value.split(" ");
 			for (String token : tokens) {
-				if (token.length() > 2 && !fillings.contains(token.toLowerCase())) {
+				if (token.length() > 2 && !stopwords.contains(token.toLowerCase())) {
 					result.add(token);
 				}
 			}

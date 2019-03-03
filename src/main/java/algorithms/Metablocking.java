@@ -28,7 +28,7 @@ public class Metablocking {
     }
 
     private void createEntityIndex() {
-        List<Block> list = bc.getBlocks();
+        Set<Block> list = bc.getBlocks();
         for (Block b : list) {
             List<EntityDescription> ent = new ArrayList<>();
             ent.addAll(b.getInnerBlock1());
@@ -63,13 +63,13 @@ public class Metablocking {
 
     public Graph createGraph() {
         gr = new Graph();
-        List<Block> list = bc.getBlocks();
+        Set<Block> blocks = bc.getBlocks();
         double local = 0;
         int KB1 = bc.getSizeKB1();
         int KB2 = bc.getSizeKB2();
         int size = KB1 + KB2;
         
-        for (Block b : list) {
+        for (Block b : blocks) {
             Set<EntityDescription> inner1 = b.getInnerBlock1();
             Set<EntityDescription> inner2 = b.getInnerBlock2();
             //int size = ent.size();
@@ -94,14 +94,6 @@ public class Metablocking {
      * @return 
      */
     public Graph edgeWeightinhCommonBlocks(Graph g) {
-
-        List<Block> list = bc.getBlocks();
-
-//        for(Block b : list){
-//            List<EntityDescription> ent = b.getEnt();
-//            int size = ent.size();
-//            
-//        }
         Map<String, Edge> edges = gr.getEdges();
         for (String s : edges.keySet()) {
             System.out.println(s + " " + edges.get(s).getCommonBlocks());
@@ -112,13 +104,11 @@ public class Metablocking {
     public Graph edgeWeightingJaccard(Graph g) {
         Map<String, Edge> edges = gr.getEdges();
         for (String s : edges.keySet()) {
-            String nodes[] = s.split("_");
+            String[] nodes = s.split("_");
             Long id1 = Long.parseLong(nodes[0]);
             Long id2 = Long.parseLong(nodes[1]);
-            List<Block> list1 = new ArrayList<>();
-            list1.addAll(entityIndex.get(id1));
-            List<Block> list2 = new ArrayList<>();
-            list2.addAll(entityIndex.get(id2));
+            List<Block> list1 = new ArrayList<>(entityIndex.get(id1));
+            List<Block> list2 = new ArrayList<>(entityIndex.get(id2));
             int size1 = list1.size();
             int size2 = list2.size();
             list1.retainAll(list2);

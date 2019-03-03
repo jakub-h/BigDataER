@@ -65,7 +65,7 @@ public class Block {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Block block = (Block) o;
-		return Objects.equals(id, block.id);
+		return Objects.equals(token, block.token);
 	}
 
 	@Override

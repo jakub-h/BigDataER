@@ -61,8 +61,13 @@ def create_source_dataset():
     films = pd.read_csv("datasets/tmp/films_filtered.csv", delimiter="\t")
     actors = pd.read_csv("datasets/tmp/actors_filtered.csv", delimiter="\t")
     actresses = pd.read_csv("datasets/tmp/actresses_filtered.csv", delimiter="\t")
-    with open("datasets/final/source.csv", 'a') as output:
-        names = ["Sergio Leone", "Akira Kurosawa", "Steven Spielberg", "George Lucas"]  # and so on...
+    with open("datasets/final/source.csv", 'w') as output:
+        names = ["Sergio Leone", "Akira Kurosawa", "Steven Spielberg", "George Lucas", "Ingmar Bergman", "Tim Burton",
+                 "Christopher Nolan", "James Cameron", "Ridley Scott", "David Fincher", "Peter Jackson", "Martin Scorsese",
+                 "James Cameron", "Milos Forman", "Stanley Kubrick", "Clint Eastwood", "Woody Allen", "David Lynch",
+                 "Guy Ritchie", "Robert Rodriguez", "Alfred Hitchcock", "Joel Coen", "Guillermo del Toro", "Roman Polanski",
+                 "Karel Zeman", "Lilly Wachowski", "Rob Zombie", "Michael Bay", "Frank Darabont", "Ladislav Smoljak",
+                 "Lars von Trier"]
         for name in names:
             for i_dir, director in directors.loc[directors['primaryName'] == name].iterrows():
                 print(director)
@@ -121,7 +126,7 @@ if __name__ == '__main__':
     # filter_num_of_titles()
     # filter_films()
     # create_source_dataset()
-    modify_first_knowledgebase()
+    # modify_first_knowledgebase()
     # modify_second_knowledgebase()
 
 
