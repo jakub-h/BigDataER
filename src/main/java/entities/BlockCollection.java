@@ -76,4 +76,20 @@ public class BlockCollection {
 				", blocks=" + blocks +
 				'}';
 	}
+
+	public void niceOutput() {
+		System.out.println("---> Block Collection: id=" + id);
+		for (Block block : blocks) {
+			System.out.println("-- Block: token='" + block.getToken() + "'");
+			System.out.print("- inner block 1: [");
+			for (EntityDescription ed : block.getInnerBlock1()) {
+				System.out.print("(id=" + ed.getId() + " rwe_id=" + ed.getRealWorldEntityId() + "), ");
+			}
+			System.out.print("]\n- inner block 2: [");
+			for (EntityDescription ed : block.getInnerBlock2()) {
+				System.out.print("(id=" + ed.getId() + " rwe_id=" + ed.getRealWorldEntityId() + "), ");
+			}
+			System.out.println("]");
+		}
+	}
 }

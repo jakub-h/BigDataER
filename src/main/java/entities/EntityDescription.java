@@ -45,20 +45,6 @@ public class EntityDescription {
 		this.attrValPairs = attrValPairs;
 	}
 
-	public Set<String> getTokens(List<String> stopwords) {
-		Set<String> result = new HashSet<>();
-		Collection<String> values = attrValPairs.values();
-		for (String value : values) {
-			String[] tokens = value.split(" ");
-			for (String token : tokens) {
-				if (token.length() > 2 && !stopwords.contains(token.toLowerCase())) {
-					result.add(token);
-				}
-			}
-		}
-		return result;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

@@ -59,7 +59,7 @@ public class KnowledgeBase {
 				'}';
 	}
 
-	public void loadDataset(String pathToFile) {
+	private void loadDataset(String pathToFile) {
 		List<String> header = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
 			String line;
