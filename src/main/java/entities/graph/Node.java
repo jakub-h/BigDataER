@@ -15,11 +15,13 @@ import java.util.List;
 public class Node {
     
     private Long id;
+    private String title;
     List<Edge> edges;
     
     
-    public Node(Long id){
+    public Node(Long id, String title){
         this.id = id;
+        this.title = title;
         edges = new ArrayList<>();
     }
     
@@ -27,6 +29,8 @@ public class Node {
     public void addEdge(Edge e){
         edges.add(e);
     }
+    
+    
     
     public String toString(){
         String s = "";
@@ -55,7 +59,7 @@ public class Node {
         }
     }
     
-    public void removeEdges(List<String> keep){
+    public void keepEdges(List<String> keep){
         List<Edge> rem = new ArrayList<>();
         
         for(Edge e : edges){
@@ -69,6 +73,10 @@ public class Node {
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
     
     
