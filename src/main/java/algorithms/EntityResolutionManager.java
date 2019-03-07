@@ -351,9 +351,9 @@ public class EntityResolutionManager {
 			}
 		}
 		if (verbose > 0) {
-			System.out.println("\n==== Filtering Block Collection ====");
-			System.out.println("before: " + blocks.values().size());
-			System.out.println("after: " + result.getBlocks().size());
+			System.out.println("\n==== Filtering Block Collection (empty inner block) ====");
+			System.out.println("# of blocks before: " + blocks.values().size());
+			System.out.println("# of blocks after: " + result.getBlocks().size());
 		}
 		return result;
 	}

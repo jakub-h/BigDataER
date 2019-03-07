@@ -90,9 +90,14 @@ def create_source_dataset():
 
 def modify_first_knowledgebase():
     with open("datasets/final/kb_1.csv", 'w') as output:
+        titles = []
         output.write("title;director;productionYear;actor;actress\n")
         source = pd.read_csv("datasets/final/source.csv", delimiter=";")
         for index, film in source.iterrows():
+            if film["title"] in titles:
+                continue;
+            else:
+                titles.append(film["title"])
             output.write(film["title"] + ";")
             if random() < 0.85:
                 output.write(film["director"])
@@ -107,9 +112,15 @@ def modify_first_knowledgebase():
 
 
 def modify_second_knowledgebase():
-    with open("datasets/final/kb_2.csv", 'a') as output:
+    with open("datasets/final/kb_2.csv", 'w') as output:
+        titles = []
         source = pd.read_csv("datasets/final/source.csv", delimiter=";")
+        output.write("name;directedBy;premiere;maleActor;femaleActor\n")
         for index, film in source.iterrows():
+            if film["title"] in titles:
+                continue;
+            else:
+                titles.append(film["title"])
             output.write(film["title"] + ";")
             director = film["director"].split(" ")
             output.write(director[0][0] + ". " + director[-1] + ";")
@@ -121,19 +132,10 @@ def modify_second_knowledgebase():
 
 
 if __name__ == '__main__':
-    # split_data()
-    # filter_professions()
-    # filter_num_of_titles()
-    # filter_films()
-    # create_source_dataset()
-    # modify_first_knowledgebase()
-    # modify_second_knowledgebase()
-
-
-
-
-
-
-
-
-
+     #split_data()
+     #filter_professions()
+     #filter_num_of_titles()
+     #filter_films()
+     #create_source_dataset()
+     modify_first_knowledgebase()
+     modify_second_knowledgebase()

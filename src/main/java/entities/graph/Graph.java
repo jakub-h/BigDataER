@@ -15,38 +15,33 @@ import java.util.Map;
  * @author mariastr
  */
 public class Graph {
+
     List<Node> nodes;
-    
-    Map<Long,Node> nodeEntry;
-    
+    Map<Long, Node> nodeEntry;
     Map<String, Edge> edges;
-    
-    public Graph(){
+
+    public Graph() {
         nodes = new ArrayList<>();
         nodeEntry = new HashMap<>();
         edges = new HashMap<>();
     }
-    
-    
-    public void addNode(Long id){
-        
-        if(nodeEntry.containsKey(id)){
+
+    public void addNode(Long id, String title) {
+        if (nodeEntry.containsKey(id)) {
             return;
         }
-        Node n = new Node(id);
+        Node n = new Node(id,title);
         nodes.add(n);
         nodeEntry.put(id, n);
     }
-    
-    
-    public void addEdge(Long id1 ,Long id2){
-        String edgeId = getEdgeId(id1,id2);
-        if("".equals(edgeId)){
+
+    public void addEdge(Long id1, Long id2) {
+        String edgeId = getEdgeId(id1, id2);
+        if ("".equals(edgeId)) {
             System.out.println("Trying to create edge to itself");
             return;
         }
-        if(edges.containsKey(edgeId)){
-            System.out.println("Edge already exists: " + edgeId);
+        if (edges.containsKey(edgeId)) {
             Edge e = edges.get(edgeId);
             e.addCommonBlock();
             return;
@@ -60,22 +55,21 @@ public class Graph {
     }
 
     private String getEdgeId(Long id1, Long id2) {
-        if(id1 > id2){
+        if (id1 > id2) {
             return id2 + "_" + id1;
-        }else if(id2 > id1){
+        } else if (id2 > id1) {
             return id1 + "_" + id2;
-        }else{
+        } else {
             return "";
         }
     }
-    
-    
-    public String toSrting(){
+
+    public String toSrting() {
         String s = "";
-        for(Node n : nodeEntry.values()){
+        for (Node n : nodeEntry.values()) {
             s = s + n.toString() + "\n";
         }
-        
+
         return s;
     }
 
@@ -94,11 +88,23 @@ public class Graph {
     public void setEdges(Map<String, Edge> edges) {
         this.edges = edges;
     }
-    
-    public void printEdges(){
-        for(String s : edges.keySet()){
+
+    public void printEdges() {
+        for (String s : edges.keySet()) {
             System.out.println(s);
         }
     }
-        
+
+    public List<String> getPrunnedEdges(){
+        List<String> prunnedEdges = new ArrayList<>();
+
+        for(Node n : nodes){
+            List<Edge> ed = n.getEdges();
+            for(Edge e : ed){
+                prunnedEdges.add(e.getId());
+            }
+        }
+
+        return prunnedEdges;
+    }
 }

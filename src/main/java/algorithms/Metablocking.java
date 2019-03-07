@@ -28,8 +28,8 @@ public class Metablocking {
     }
 
     private void createEntityIndex() {
-        Set<Block> list = bc.getBlocks();
-        for (Block b : list) {
+        Set<Block> blocks = bc.getBlocks();
+        for (Block b : blocks) {
             List<EntityDescription> ent = new ArrayList<>();
             ent.addAll(b.getInnerBlock1());
             ent.addAll(b.getInnerBlock2());
@@ -48,20 +48,9 @@ public class Metablocking {
                 bList.add(b);
             }
         }
-//        
-//        for(Long edId : entityIndex.keySet()){
-//            System.out.println(edId);
-//            String str = "[ ";
-//            List<Block> bList = entityIndex.get(edId);
-//            for(Block b : bList){
-//                str = str + b.getBlockId() + " ";
-//            }
-//            str = str + " ]";
-//            System.out.println(str);
-//        }
     }
 
-    public Graph createGraph() {
+    public void createGraph() {
         gr = new Graph();
         Set<Block> blocks = bc.getBlocks();
         double local = 0;
@@ -73,35 +62,19 @@ public class Metablocking {
             Set<EntityDescription> inner1 = b.getInnerBlock1();
             Set<EntityDescription> inner2 = b.getInnerBlock2();
             //int size = ent.size();
-            local = local + (double)(inner1.size() + inner2.size()) / (double)size;
+            local = local + (double) (inner1.size() + inner2.size()) / (double) size;
             for (EntityDescription in1 : inner1) {
-                gr.addNode(in1.getId());
+                gr.addNode(in1.getId(),in1.getAttrValPairs().get("title"));
                 for (EntityDescription in2 : inner2) {
-                    gr.addNode(in2.getId());
+                    gr.addNode(in2.getId(),in1.getAttrValPairs().get("name"));
                     gr.addEdge(in1.getId(), in2.getId());
                 }
             }
         }
-        k = (int)Math.floor(local);
-        System.out.println(gr.toSrting());
-        return gr;
+        k = (int) Math.floor(local);
     }
 
-    
-    /**
-     * Done during creation of entityIndex
-     * @param g
-     * @return 
-     */
-    public Graph edgeWeightinhCommonBlocks(Graph g) {
-        Map<String, Edge> edges = gr.getEdges();
-        for (String s : edges.keySet()) {
-            System.out.println(s + " " + edges.get(s).getCommonBlocks());
-        }
-        return gr;
-    }
-
-    public Graph edgeWeightingJaccard(Graph g) {
+    public Graph edgeWeightingJaccard() {
         Map<String, Edge> edges = gr.getEdges();
         for (String s : edges.keySet()) {
             String[] nodes = s.split("_");
@@ -116,7 +89,6 @@ public class Metablocking {
             Edge e = edges.get(s);
             weight = round(weight, 3);
             e.setJaccard(weight);
-            System.out.println("For edge: " + s + "     original size1: " + size1 + "   size2: " + size2 + "     common: " + list1.size() + "     wieght: " + weight);
         }
         return gr;
     }
@@ -127,33 +99,31 @@ public class Metablocking {
         return bd.doubleValue();
     }
 
-    public Graph weightEdgePruning(Graph g, String similarity) {
-        double threshold = findThreshold(g, similarity);
-        System.out.println("Threshold: " + threshold);
-        Map<String, Edge> edges = g.getEdges();
+    public void weightEdgePruning(String similarity) {
+        double threshold = findThreshold(similarity);
+        System.out.println("\n==== Weight Edge Pruning ====");
+        System.out.println("Threshold: " + threshold + " (" + similarity + ")\n");
+        Map<String, Edge> edges = gr.getEdges();
         for (Iterator<Map.Entry<String, Edge>> it = edges.entrySet().iterator(); it.hasNext();) {
             Map.Entry<String, Edge> entry = it.next();
             Edge e = entry.getValue();
-            if(similarity.equalsIgnoreCase("jaccard")){
-                if(e.getJaccard()< threshold){
+            if (similarity.equalsIgnoreCase("jaccard")) {
+                if (e.getJaccard() < threshold) {
                     it.remove();
                 }
-            }else{
-                if(e.getCommonBlocks()< threshold){
+            } else {
+                if (e.getCommonBlocks() < threshold) {
                     it.remove();
                 }
             }
         }
-        g.setEdges(edges);
-        System.out.println("Prunned Graph:");
-        g.printEdges();
-        return g;
+        gr.setEdges(edges);
+        printWeightEdges();
     }
 
-    private double findThreshold(Graph g, String sim) {
-        double th = 0;
+    private double findThreshold(String sim) {
         double weights = 0;
-        Map<String, Edge> edges = g.getEdges();
+        Map<String, Edge> edges = gr.getEdges();
         double count = (double) edges.size();
 
         if (sim.equalsIgnoreCase("jaccard")) {
@@ -167,49 +137,70 @@ public class Metablocking {
                 weights += (double) e.getCommonBlocks();
             }
         }
-
-        th = weights / count;
-        return th;
+        return weights / count;
     }
-    
-    
-    public Graph cardinalityNodePruning(Graph g, String similarity){
-        
-        System.out.println("k: " + k);
-        //k=2;
-        List<Node> nodes = g.getNodes();
-        for(Node n : nodes){
+
+    public void cardinalityNodePruning(String similarity) {
+        System.out.println("\n==== Cardinality Node Pruning (" + similarity + ") ====");
+        System.out.println("k: " + k + "\n");
+        List<Node> nodes = gr.getNodes();
+        for (Node n : nodes) {
             List<Edge> edges = n.getEdges();
-            if(edges.size() <= k){
+            if (edges.size() <= k) {
                 continue;
             }
-            LinkedHashMap<String,Double> ed = new LinkedHashMap<>();
-            if(similarity.equalsIgnoreCase("jaccard")){
-                for(Edge e : edges){
+            LinkedHashMap<String, Double> ed = new LinkedHashMap<>();
+            if (similarity.equalsIgnoreCase("jaccard")) {
+                for (Edge e : edges) {
                     ed.put(e.getId(), e.getJaccard());
                 }
-            }else{
-                for(Edge e : edges){
-                    ed.put(e.getId(), (double)e.getCommonBlocks());
+            } else {
+                for (Edge e : edges) {
+                    ed.put(e.getId(), (double) e.getCommonBlocks());
                 }
             }
             ed = sortByValues(ed);
-            List<String> keys = new ArrayList<>();
-            keys.addAll(ed.keySet());
+            List<String> keys = new ArrayList<>(ed.keySet());
             List<String> keep = new ArrayList<>();
-            for(int i=0;i<k;i++){
+            for (int i = 0; i < k; i++) {
                 keep.add(keys.get(i));
             }
-            
-            n.removeEdges(keep);
-            
+            n.keepEdges(keep);
         }
-        System.out.println("Graph");
-        System.out.println(g.toSrting());
-        return g;
+        printCardinalityEdge();
     }
-    
-        private static LinkedHashMap sortByValues(LinkedHashMap map) {
+
+    private void printCardinalityEdge(){
+        Set<String> prunnedEdge = new HashSet<>(gr.getPrunnedEdges());
+        int all = prunnedEdge.size();
+        int count = 0;
+        for(String s : prunnedEdge){
+            String [] el = s.split("_");
+            EntityDescription e1 = entityEntry.get(Long.parseLong(el[0]));
+            EntityDescription e2 = entityEntry.get(Long.parseLong(el[1]));
+            Map<String,String> e1Att = e1.getAttrValPairs();
+            Map<String,String> e2Att = e2.getAttrValPairs();
+            String e1Title,e2Title;
+            if(e1Att.containsKey("title")){
+                e1Title = e1Att.get("title");
+            }else{
+                e1Title = e1Att.get("name");
+            }
+            if(e2Att.containsKey("title")){
+                e2Title = e2Att.get("title");
+            }else{
+                e2Title = e2Att.get("name");
+            }
+            if(e1Title.equalsIgnoreCase(e2Title)){
+                count++;
+                System.out.println(e1Title + " -> " + e2Title);
+            }
+        }
+        System.out.println("\nTrue Pairs: " + count + " of " + bc.getSizeKB1());
+        System.out.println("All comparisons: " + all);
+    }
+
+    private static LinkedHashMap sortByValues(LinkedHashMap map) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
         Collections.sort(list, new Comparator() {
@@ -222,10 +213,45 @@ public class Metablocking {
         // Here I am copying the sorted list in HashMap
         // using LinkedHashMap to preserve the insertion order
         LinkedHashMap sortedHashMap = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Object o : list) {
+            Map.Entry entry = (Map.Entry) o;
             sortedHashMap.put(entry.getKey(), entry.getValue());
         }
         return sortedHashMap;
+    }
+
+    private void printWeightEdges() {
+        Map<String,Edge> edges = gr.getEdges();
+        int count = 0;
+        List<String> doub = new ArrayList<>();
+        int all = edges.size();
+        for(String s : edges.keySet()){
+            String [] el = s.split("_");
+            EntityDescription e1 = entityEntry.get(Long.parseLong(el[0]));
+            EntityDescription e2 = entityEntry.get(Long.parseLong(el[1]));
+            Map<String,String> e1Att = e1.getAttrValPairs();
+            Map<String,String> e2Att = e2.getAttrValPairs();
+            String e1Title,e2Title;
+            if(e1Att.containsKey("title")){
+                e1Title = e1Att.get("title");
+            }else{
+                e1Title = e1Att.get("name");
+            }
+            if(e2Att.containsKey("title")){
+                e2Title = e2Att.get("title");
+            }else{
+                e2Title = e2Att.get("name");
+            }
+            if(e1Title.equalsIgnoreCase(e2Title)){
+                if(doub.contains(e1Title)){
+                    System.out.println("-------->" + e1Title);
+                }
+                doub.add(e1Title);
+                count++;
+                System.out.println(e1Title + " -> " + e2Title);
+            }
+        }
+        System.out.println("\nTrue Pairs: " + count + " of " + bc.getSizeKB1());
+        System.out.println("All comparisons: " + all);
     }
 }
