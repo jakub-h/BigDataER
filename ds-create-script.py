@@ -99,13 +99,13 @@ def modify_first_knowledgebase():
             else:
                 titles.append(film["title"])
             output.write(film["title"] + ";")
-            if random() < 0.85:
+            if random() < 0.75:
                 output.write(film["director"])
             output.write(";")
-            if random() < 0.85:
+            if random() < 0.75:
                 output.write(str(film["year"]))
             output.write(";")
-            if random() < 0.85:
+            if random() < 0.75:
                 output.write(film["actor"])
             output.write(";")
             output.write(film["actress"] + "\n")
